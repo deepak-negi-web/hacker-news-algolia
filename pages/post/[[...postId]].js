@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
+import { PostDetails, Comments } from "../../components";
 const PostDetailPage = () => {
   const router = useRouter();
   const postIds = router.query.postId || [];
@@ -28,14 +29,9 @@ const PostDetailPage = () => {
     return <div>Loading...</div>;
   }
   return (
-    <div>
-      <h1>{post.title}</h1>
-      <p>{post.url}</p>
-      <p>{post.author}</p>
-      <p>{post.points}</p>
-      <p>{post.num_comments}</p>
-      <p>{post.created_at}</p>
-      <p>{post.objectID}</p>
+    <div style={{ padding: "1rem" }}>
+      <PostDetails post={post} />
+      <Comments post={post} />
     </div>
   );
 };

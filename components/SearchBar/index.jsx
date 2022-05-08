@@ -19,11 +19,15 @@ export const SearchBar = () => {
 
   const getSearchResults = async (event) => {
     setLoadingStatus(true);
-    const result = await fetchPosts(
-      `https://hn.algolia.com/api/v1/search?query=${event.target.value}`
-    );
-    if (result && result.hits) {
-      setPosts(result.hits);
+    const { value } = event.target;
+    if (value) {
+      const result = await fetchPosts(
+        `https://hn.algolia.com/api/v1/search?query=${value}`
+      );
+      if (result && result.hits) {
+        const filteredPosts = result.hits.filter((post) => post.title);
+        setPosts(filteredPosts);
+      }
     }
     setLoadingStatus(false);
   };

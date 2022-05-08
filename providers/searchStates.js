@@ -52,7 +52,8 @@ export const SearchProvider = ({ children }) => {
         setLoadingStatus(true);
         const result = await fetchPosts("https://hn.algolia.com/api/v1/search");
         if (result && result.hits) {
-          setPosts(result.hits);
+          const filteredPosts = result.hits.filter((post) => post.title);
+          setPosts(filteredPosts);
         }
         setLoadingStatus(false);
       })();
