@@ -1,12 +1,16 @@
-import { SearchBar } from "../components";
+import { SearchBar, Home } from "../components";
+import { SearchProvider } from "../providers/searchStates";
 import styles from "../styles/home.module.css";
-export default function Home() {
+
+export default function HomePage() {
   return (
-    <div>
-      <h1>Home</h1>
-      <div className={styles.searchBarWrapper}>
-        <SearchBar />
+    <SearchProvider>
+      <div className={styles.container}>
+        <div className={styles.searchBarWrapper}>
+          <SearchBar />
+        </div>
+        <Home />
       </div>
-    </div>
+    </SearchProvider>
   );
 }

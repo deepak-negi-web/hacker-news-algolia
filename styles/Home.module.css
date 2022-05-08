@@ -1,3 +1,6 @@
+.container {
+  padding: 16px;
+}
 .searchBarWrapper {
   width: 80%;
   margin: 0 auto;
