@@ -10,6 +10,7 @@ const PostDetailPage = () => {
   const postId = router.query.postId;
   const [post, setPost] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [loadingMessage, setLoadingMessage] = React.useState("Loading...");
 
   const fetchPostDetails = React.useCallback(async () => {
     const response = await fetch(
@@ -20,7 +21,11 @@ const PostDetailPage = () => {
   }, [postId]);
 
   React.useEffect(() => {
-    if (!post) {
+    setLoadingMessage(randomLoadingMessage);
+  }, []);
+
+  React.useEffect(() => {
+    if (postId && !post) {
       fetchPostDetails()
         .then((data) => {
           setPost(data);
@@ -28,13 +33,13 @@ const PostDetailPage = () => {
         })
         .catch(() => setIsLoading(false));
     }
-  }, []);
+  }, [postId, post, fetchPostDetails]);
 
   if (isLoading) {
     return (
       <div className="loading_mangify">
         <Spinner />
-        <h3>{randomLoadingMessage}</h3>
+        <h3>{loadingMessage}</h3>
       </div>
     );
   }
@@ -44,7 +49,8 @@ const PostDetailPage = () => {
         <ArrowBackIosNewOutlinedIcon />
         <p>Back</p>
       </div>
-      <PostDetails loading={isLoading} post={post} />
+
+      <PostDetails post={post} />
       <Comments post={post} />
     </div>
   );

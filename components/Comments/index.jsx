@@ -4,10 +4,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import moment from "moment";
+import parse from "html-react-parser";
+
 import { Wrapper } from "./styled";
 
 export const Comments = React.memo(function CommentsComp({ post }) {
-  const filteredComments = post.children.filter((comment) => comment.author);
+  const filteredComments = React.useMemo(() => {
+    return post.children.filter((comment) => comment.author);
+  }, [post.children]);
+  console.log("filteredComments", filteredComments);
+
   const flattenArray = (arr = []) => {
     return arr.reduce(
       (result, item) => [
@@ -18,26 +24,28 @@ export const Comments = React.memo(function CommentsComp({ post }) {
       []
     );
   };
-  const renderTree = (node) => (
-    <TreeItem
-      key={node.id}
-      nodeId={node.id.toString()}
-      label={`${node.author} on ${moment(post.created_at).format(
-        "MMMM Do, YYYY"
-      )}`}
-      sx={{
-        color: "#828282",
-      }}
-    >
-      <div
-        className="comment_text"
-        dangerouslySetInnerHTML={{ __html: node.text }}
-      />
-      {Array.isArray(node.children)
-        ? node.children.map((childNode) => renderTree(childNode))
-        : null}
-    </TreeItem>
-  );
+  const renderTree = (node) => {
+    console.log("node", node);
+    return (
+      <TreeItem
+        key={node.id}
+        nodeId={node.id.toString()}
+        label={`${node?.author || "Unknown"} on ${moment(
+          post?.created_at
+        ).format("MMMM Do, YYYY")}`}
+        sx={{
+          color: "#828282",
+        }}
+      >
+        <div className="comment_text">
+          {node.text ? parse(node.text) : "N/A"}
+        </div>
+        {Array.isArray(node.children)
+          ? node.children.map((childNode) => renderTree(childNode))
+          : null}
+      </TreeItem>
+    );
+  };
 
   return (
     <Wrapper>
@@ -49,7 +57,8 @@ export const Comments = React.memo(function CommentsComp({ post }) {
           sx={{ overflowY: "auto" }}
           defaultExpanded={flattenArray(filteredComments)}
         >
-          {filteredComments.map((comment) => renderTree(comment))}
+          {!!filteredComments.length &&
+            filteredComments.map((comment) => renderTree(comment))}
         </TreeView>
       </div>
     </Wrapper>
