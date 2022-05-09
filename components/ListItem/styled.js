@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 export const StyledWrapper = styled.div`
+  min-height: 100px;
+  min-width: 680px;
+  width: 100%;
   padding: 8px;
   background: #f8f8f8;
   border-radius: 5px;
@@ -13,10 +16,5 @@ export const StyledWrapper = styled.div`
       text-decoration: underline;
       color: #00a8ff;
     }
-  }
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
   }
 `;

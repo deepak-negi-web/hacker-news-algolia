@@ -6,8 +6,18 @@ import TreeItem from "@mui/lab/TreeItem";
 import moment from "moment";
 import { Wrapper } from "./styled";
 
-export const Comments = ({ post }) => {
+export const Comments = React.memo(function CommentsComp({ post }) {
   const filteredComments = post.children.filter((comment) => comment.author);
+  const flattenArray = (arr = []) => {
+    return arr.reduce(
+      (result, item) => [
+        ...result,
+        item.id.toString(),
+        ...flattenArray(item.children),
+      ],
+      []
+    );
+  };
   const renderTree = (node) => (
     <TreeItem
       key={node.id}
@@ -20,7 +30,7 @@ export const Comments = ({ post }) => {
       }}
     >
       <div
-        style={{ color: "#000" }}
+        className="comment_text"
         dangerouslySetInnerHTML={{ __html: node.text }}
       />
       {Array.isArray(node.children)
@@ -28,24 +38,20 @@ export const Comments = ({ post }) => {
         : null}
     </TreeItem>
   );
-  // const treeViewComments = getTreeViewArray({
-  //   dataset: post.children,
-  //   rootIdKeyName: "id",
-  //   parentIdKeyName: "parent_id",
-  // });
+
   return (
     <Wrapper>
       <h2>Comments</h2>
-      <TreeView
-        defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpandIcon={<ChevronRightIcon />}
-        sx={{ flexGrow: 1, overflowY: "auto" }}
-        defaultExpanded={filteredComments.map((comment) =>
-          comment.id.toString()
-        )}
-      >
-        {filteredComments.map((comment) => renderTree(comment))}
-      </TreeView>
+      <div className="comment_wrapper">
+        <TreeView
+          defaultCollapseIcon={<ExpandMoreIcon />}
+          defaultExpandIcon={<ChevronRightIcon />}
+          sx={{ overflowY: "auto" }}
+          defaultExpanded={flattenArray(filteredComments)}
+        >
+          {filteredComments.map((comment) => renderTree(comment))}
+        </TreeView>
+      </div>
     </Wrapper>
   );
-};
+});

@@ -4,7 +4,7 @@ import moment from "moment";
 
 import { StyledWrapper } from "./styled";
 
-export const PostDetails = ({ post }) => {
+export const PostDetails = React.memo(function PostData({ post }) {
   return (
     <StyledWrapper>
       <div className="heading__title">
@@ -20,4 +20,4 @@ export const PostDetails = ({ post }) => {
       </p>
     </StyledWrapper>
   );
-};
+});

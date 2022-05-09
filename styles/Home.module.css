@@ -2,6 +2,11 @@
   padding: 16px;
 }
 .searchBarWrapper {
+  position: sticky;
+  top: 62px;
+  padding: 8px 0;
+  z-index: 100;
+  background: #fff;
   width: 80%;
   margin: 0 auto;
   display: flex;

@@ -1,6 +1,7 @@
 import React from "react";
-import { Wrapper } from "./styled";
 import Image from "next/image";
+import Button from "@mui/material/Button";
+import { Wrapper } from "./styled";
 export const Empty = ({
   title = "No results found",
   message = "No results match the filter criteria. Clear all filters and try again.",
@@ -17,7 +18,7 @@ export const Empty = ({
       />
       <h1 className="title">{title}</h1>
       <p className="message">{message}</p>
-      <button onClick={clearFilterHandler}>Clear Filter</button>
+      <Button onClick={clearFilterHandler}>Clear Filter</Button>
     </Wrapper>
   );
 };

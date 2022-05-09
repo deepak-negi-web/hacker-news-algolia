@@ -6,3 +6,4 @@ export * from "./ListItem";
 export * from "./PostDetails";
 export * from "./Comments";
 export * from "./Empty";
+export * from "./Spinner";
