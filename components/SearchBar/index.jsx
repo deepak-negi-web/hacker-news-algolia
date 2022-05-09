@@ -6,6 +6,7 @@ import { useSearch } from "../../providers/searchStates";
 
 export const SearchBar = () => {
   const { setPosts, setLoadingStatus, fetchPosts } = useSearch();
+  const textFieldRef = React.useRef(null);
   // debounce function for limiting the api request
   const debounce = (fn, delay) => {
     let timer;
@@ -35,6 +36,7 @@ export const SearchBar = () => {
   return (
     <Stack spacing={2} sx={{ width: "60%" }}>
       <TextField
+        ref={textFieldRef}
         id="outlined-search"
         label="Search stories"
         placeholder="Search stories by title,url or author"

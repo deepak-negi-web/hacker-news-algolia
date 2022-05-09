@@ -1,12 +1,13 @@
 import React from "react";
 import { ListItem } from "../ListItem";
+import { Empty } from "../Empty";
 import { useSearch } from "../../providers/searchStates";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 
 import { Wrapper } from "./styled";
 export const Home = () => {
-  const { isLoading, posts } = useSearch();
+  const { isLoading, posts, setClearSearch } = useSearch();
 
   if (isLoading) {
     return (
@@ -22,6 +23,10 @@ export const Home = () => {
         ))}
       </Stack>
     );
+  }
+
+  if (posts.length === 0) {
+    return <Empty clearFilterHandler={() => setClearSearch(true)} />;
   }
   return (
     <Wrapper>

@@ -27,6 +27,7 @@ const reducer = (state, { type, payload }) => {
 
 export const SearchProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
+  const [clearSearch, setClearSearch] = React.useState(false);
   const setPosts = (posts) => {
     dispatch({ type: "SET_POSTS", payload: posts });
   };
@@ -47,7 +48,7 @@ export const SearchProvider = ({ children }) => {
   };
 
   React.useEffect(() => {
-    if (state.posts.length === 0) {
+    if (state.posts.length === 0 || clearSearch) {
       (async () => {
         setLoadingStatus(true);
         const result = await fetchPosts("https://hn.algolia.com/api/v1/search");
@@ -58,7 +59,7 @@ export const SearchProvider = ({ children }) => {
         setLoadingStatus(false);
       })();
     }
-  }, []);
+  }, [clearSearch]);
 
   return (
     <SearchContext.Provider
@@ -68,6 +69,8 @@ export const SearchProvider = ({ children }) => {
         setPosts,
         setLoadingStatus,
         fetchPosts,
+        setClearSearch,
+        clearSearch,
       }}
     >
       {children}
