@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { PostDetails, Comments, Spinner } from "../../components";
 import { randomLoadingMessage } from "../../utils/getLoadingMessage";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
-import styles from "../../styles/post.module.css";
+import styles from "../../styles/Post.module.css";
 
 const PostDetailPage = () => {
   const router = useRouter();
