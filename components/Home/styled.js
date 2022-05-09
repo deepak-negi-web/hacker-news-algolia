@@ -8,6 +8,9 @@ export const Wrapper = styled.div`
   justify-content: center;
   width: 80%;
   margin: 0 auto;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
   .listWrap {
     padding: 0;
     margin: 0;
