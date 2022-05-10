@@ -25,4 +25,7 @@ export const Wrapper = styled.div`
       margin: 0;
     }
   }
+  .no_comments {
+    padding: 16px;
+  }
 `;

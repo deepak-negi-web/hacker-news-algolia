@@ -12,7 +12,6 @@ export const Comments = React.memo(function CommentsComp({ post }) {
   const filteredComments = React.useMemo(() => {
     return post.children.filter((comment) => comment.author);
   }, [post.children]);
-  console.log("filteredComments", filteredComments);
 
   const flattenArray = (arr = []) => {
     return arr.reduce(
@@ -25,7 +24,6 @@ export const Comments = React.memo(function CommentsComp({ post }) {
     );
   };
   const renderTree = (node) => {
-    console.log("node", node);
     return (
       <TreeItem
         key={node.id}
@@ -51,15 +49,18 @@ export const Comments = React.memo(function CommentsComp({ post }) {
     <Wrapper>
       <h2>Comments</h2>
       <div className="comment_wrapper">
-        <TreeView
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
-          sx={{ overflowY: "auto" }}
-          defaultExpanded={flattenArray(filteredComments)}
-        >
-          {!!filteredComments.length &&
-            filteredComments.map((comment) => renderTree(comment))}
-        </TreeView>
+        {filteredComments.length > 0 ? (
+          <TreeView
+            defaultCollapseIcon={<ExpandMoreIcon />}
+            defaultExpandIcon={<ChevronRightIcon />}
+            sx={{ overflowY: "auto" }}
+            defaultExpanded={flattenArray(filteredComments)}
+          >
+            {filteredComments.map((comment) => renderTree(comment))}
+          </TreeView>
+        ) : (
+          <h5 className="no_comments">No comments :(</h5>
+        )}
       </div>
     </Wrapper>
   );
