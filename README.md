@@ -11,17 +11,9 @@ This a simple hacker news project which shows you the list of news with `infinte
 
 - [@DeepakNegi](https://www.github.com/deepak-negi-web)
 
-## Contributing
-
-Contributions are always welcome!
-
-See `contributing.md` for ways to get started.
-
-Please adhere to this project's `code of conduct`.
-
 ## Demo
 
-Insert gif or link to demo
+https://hacker-news-algolia.vercel.app/
 
 ## Feedback
 
