@@ -1,7 +1,9 @@
 import React from "react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { PostDetails, Comments, Spinner } from "../../components";
 import { randomLoadingMessage } from "../../utils/getLoadingMessage";
+import { fetchHackerNews } from "../../utils/fetchData";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import styles from "../../styles/Post.module.css";
 
@@ -12,28 +14,19 @@ const PostDetailPage = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [loadingMessage, setLoadingMessage] = React.useState("Loading...");
 
-  const fetchPostDetails = React.useCallback(async () => {
-    const response = await fetch(
-      `https://hn.algolia.com/api/v1/items/${postId}`
-    );
-    const data = await response.json();
-    return data;
-  }, [postId]);
-
   React.useEffect(() => {
     setLoadingMessage(randomLoadingMessage);
   }, []);
 
   React.useEffect(() => {
     if (postId && !post) {
-      fetchPostDetails()
-        .then((data) => {
-          setPost(data);
-          setIsLoading(false);
-        })
-        .catch(() => setIsLoading(false));
+      (async () => {
+        const data = await fetchHackerNews(`/items/${postId}`);
+        setPost(data);
+        setIsLoading(false);
+      })();
     }
-  }, [postId, post, fetchPostDetails]);
+  }, [postId, post]);
 
   if (isLoading) {
     return (
@@ -44,15 +37,21 @@ const PostDetailPage = () => {
     );
   }
   return (
-    <div className={styles.container}>
-      <div className={styles.head} onClick={() => router.push("/")}>
-        <ArrowBackIosNewOutlinedIcon />
-        <p>Back</p>
-      </div>
+    <>
+      <Head>
+        <title>{post.title}</title>
+        <meta name="description" content={`${post.title} by ${post.author}`} />
+      </Head>
+      <div className={styles.container}>
+        <div className={styles.head} onClick={() => router.push("/")}>
+          <ArrowBackIosNewOutlinedIcon />
+          <p>Back</p>
+        </div>
 
-      <PostDetails post={post} />
-      <Comments post={post} />
-    </div>
+        <PostDetails post={post} />
+        <Comments post={post} />
+      </div>
+    </>
   );
 };
 

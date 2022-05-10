@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
 import { useSearch } from "../../providers/searchStates";
+import { fetchHackerNews } from "../../utils/fetchData";
 
 export const SearchBar = () => {
   const { setPosts, setLoadingStatus, fetchPosts, clearSearch } = useSearch();
@@ -21,9 +21,7 @@ export const SearchBar = () => {
     setLoadingStatus(true);
     const { value } = event.target;
     if (value) {
-      const result = await fetchPosts(
-        `https://hn.algolia.com/api/v1/search?query=${value}`
-      );
+      const result = await fetchHackerNews(`/search?query=${value}`);
       if (result && result.hits) {
         const filteredPosts = result.hits.filter((post) => post.title);
         setPosts(filteredPosts);
