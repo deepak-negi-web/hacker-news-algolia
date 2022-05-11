@@ -1,38 +1,34 @@
 import React from "react";
-import { ListItem } from "../ListItem";
-import { Empty } from "../Empty";
+import dynamic from "next/dynamic";
+import Skeleton from "@mui/material/Skeleton";
 import { Spinner } from "../Spinner";
 import { useSearch } from "../../providers/searchStates";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
+import { fetchHackerNews } from "../../utils/fetchData";
+
+const ListItem = dynamic(() =>
+  import("../ListItem").then((mod) => mod.ListItem)
+);
+const Empty = dynamic(() => import("../Empty").then((mod) => mod.Empty));
 
 import { Wrapper } from "./styled";
 export const Home = () => {
-  const {
-    isLoading,
-    posts,
-    setClearSearch,
-    setPosts,
-    setLoadingStatus,
-    fetchPosts,
-  } = useSearch();
+  const { isLoading, posts, setClearSearch, setPosts } = useSearch();
   const [page, setPage] = React.useState(1);
   const [loaderRef] = useHookWithRefCallback(handleObserver);
   const [isLoadingMore, setIsLoadingMore] = React.useState(false);
 
-  const getSearchResults = async () => {
+  const fetchMoreNews = React.useCallback(async () => {
     setIsLoadingMore(true);
     if (page > 1) {
-      const result = await fetchPosts(
-        `https://hn.algolia.com/api/v1/search?page=${page}`
-      );
+      const result = await fetchHackerNews(`/search?page=${page}`);
       if (result && result.hits) {
         const filteredPosts = result.hits.filter((post) => post.title);
         setPosts(posts.concat(filteredPosts));
       }
     }
     setIsLoadingMore(false);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   // here we handle what happens when user scrolls to Load More movies
   // in this case we just update page variable
@@ -46,9 +42,9 @@ export const Home = () => {
 
   React.useEffect(() => {
     (async () => {
-      await getSearchResults();
+      await fetchMoreNews();
     })();
-  }, [page]);
+  }, [fetchMoreNews]);
 
   if (isLoading) {
     return (

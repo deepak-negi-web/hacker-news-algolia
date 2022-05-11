@@ -1,5 +1,5 @@
-import { getURL } from "next/dist/shared/lib/utils";
 import React from "react";
+import { fetchHackerNews } from "../utils/fetchData";
 
 const SearchContext = React.createContext();
 
@@ -36,27 +36,17 @@ export const SearchProvider = ({ children }) => {
     dispatch({ type: "SET_LOADING_STATUS", payload: status });
   };
 
-  const fetchPosts = async (url) => {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log("Error while searching", error);
-      return error;
-    }
-  };
-
   React.useEffect(() => {
     if (state.posts.length === 0 || clearSearch) {
       (async () => {
         setLoadingStatus(true);
-        const result = await fetchPosts("https://hn.algolia.com/api/v1/search");
+        const result = await fetchHackerNews("/search?page=1");
         if (result && result.hits) {
           const filteredPosts = result.hits.filter((post) => post.title);
           setPosts(filteredPosts);
         }
         setLoadingStatus(false);
+        setClearSearch(false);
       })();
     }
   }, [clearSearch]);
@@ -68,7 +58,6 @@ export const SearchProvider = ({ children }) => {
         isLoading: state.isLoading,
         setPosts,
         setLoadingStatus,
-        fetchPosts,
         setClearSearch,
         clearSearch,
       }}
